@@ -2,8 +2,8 @@ package app
 
 import (
 	"fmt"
-	"github.com/ashishjuyal/banking-auth/domain"
-	"github.com/ashishjuyal/banking-auth/service"
+	"github.com/andtkach/demogoauth/domain"
+	"github.com/andtkach/demogoauth/service"
 	"github.com/ashishjuyal/banking-lib/logger"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
