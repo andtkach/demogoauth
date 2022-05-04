@@ -6,7 +6,7 @@ import (
 )
 
 const HMAC_SAMPLE_SECRET = "hmacSampleSecret"
-const ACCESS_TOKEN_DURATION = time.Minute
+const ACCESS_TOKEN_DURATION = time.Hour
 const REFRESH_TOKEN_DURATION = time.Hour * 24 * 30
 
 type RefreshTokenClaims struct {
