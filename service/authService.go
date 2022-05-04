@@ -11,6 +11,7 @@ import (
 
 type AuthService interface {
 	Login(dto.LoginRequest) (*dto.LoginResponse, *errs.AppError)
+	Register(dto.RegisterRequest) (*dto.RegisterResponse, *errs.AppError)
 	Verify(urlParams map[string]string) *errs.AppError
 	Refresh(request dto.RefreshTokenRequest) (*dto.LoginResponse, *errs.AppError)
 }
@@ -44,7 +45,7 @@ func (s DefaultAuthService) Login(req dto.LoginRequest) (*dto.LoginResponse, *er
 	var appErr *errs.AppError
 	var login *domain.Login
 
-	if login, appErr = s.repo.FindBy(req.Username, req.Password); appErr != nil {
+	if login, appErr = s.repo.VerifyUser(req.Username, req.Password); appErr != nil {
 		return nil, appErr
 	}
 
@@ -61,6 +62,36 @@ func (s DefaultAuthService) Login(req dto.LoginRequest) (*dto.LoginResponse, *er
 	}
 
 	return &dto.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken}, nil
+}
+
+func (s DefaultAuthService) Register(req dto.RegisterRequest) (*dto.RegisterResponse, *errs.AppError) {
+	var appErr *errs.AppError
+	var login *domain.Login
+	var exists bool
+
+	exists, appErr = s.repo.UserExists(req.Username)
+	if !exists {
+
+		if login, appErr = s.repo.CreateUser(req.Username, req.Password); appErr != nil {
+			return nil, appErr
+		}
+
+		claims := login.ClaimsForAccessToken()
+		authToken := domain.NewAuthToken(claims)
+
+		var accessToken, refreshToken string
+		if accessToken, appErr = authToken.NewAccessToken(); appErr != nil {
+			return nil, appErr
+		}
+
+		if refreshToken, appErr = s.repo.GenerateAndSaveRefreshTokenToStore(authToken); appErr != nil {
+			return nil, appErr
+		}
+
+		return &dto.RegisterResponse{AccessToken: accessToken, RefreshToken: refreshToken}, nil
+	} else {
+		return nil, errs.NewUnexpectedError("User already exists")
+	}
 }
 
 func (s DefaultAuthService) Verify(urlParams map[string]string) *errs.AppError {

@@ -21,9 +21,10 @@ func Start() {
 	ah := AuthHandler{service.NewLoginService(authRepository, domain.GetRolePermissions())}
 
 	router.HandleFunc("/auth/login", ah.Login).Methods(http.MethodPost)
-	router.HandleFunc("/auth/register", ah.NotImplementedHandler).Methods(http.MethodPost)
+	router.HandleFunc("/auth/register", ah.Register).Methods(http.MethodPost)
 	router.HandleFunc("/auth/refresh", ah.Refresh).Methods(http.MethodPost)
 	router.HandleFunc("/auth/verify", ah.Verify).Methods(http.MethodGet)
+	//router.HandleFunc("/auth/some", ah.NotImplementedHandler).Methods(http.MethodPost)
 
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
@@ -33,8 +34,8 @@ func Start() {
 
 func getDbClient() *sqlx.DB {
 	dbUser := os.Getenv("DB_USER")
-	dbPasswd := os.Getenv("DB_PASSWD")
-	dbAddr := os.Getenv("DB_ADDR")
+	dbPasswd := os.Getenv("DB_PASSWORD")
+	dbAddr := os.Getenv("DB_ADDRESS")
 	dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
@@ -55,8 +56,8 @@ func sanityCheck() {
 		"SERVER_ADDRESS",
 		"SERVER_PORT",
 		"DB_USER",
-		"DB_PASSWD",
-		"DB_ADDR",
+		"DB_PASSWORD",
+		"DB_ADDRESS",
 		"DB_PORT",
 		"DB_NAME",
 	}

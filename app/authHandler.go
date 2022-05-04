@@ -32,9 +32,25 @@ func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+	var registerRequest dto.RegisterRequest
+	if err := json.NewDecoder(r.Body).Decode(&registerRequest); err != nil {
+		logger.Error("Error while decoding register request: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		token, appErr := h.service.Register(registerRequest)
+		logger.Info("Successful register for user " + registerRequest.Username)
+		if appErr != nil {
+			writeResponse(w, appErr.Code, appErr.AsMessage())
+		} else {
+			writeResponse(w, http.StatusOK, *token)
+		}
+	}
+}
+
 /*
   Sample URL string
- http://localhost:8181/auth/verify?token=somevalidtokenstring&routeName=GetCustomer&customer_id=2000&account_id=95470
+ http://localhost:8181/auth/verify?token=somevalidtokenstring&routeName=GetCustomer&customer_id=2000
 */
 func (h AuthHandler) Verify(w http.ResponseWriter, r *http.Request) {
 	urlParams := make(map[string]string)
