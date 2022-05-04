@@ -2,8 +2,8 @@ package domain
 
 import (
 	"database/sql"
-	"github.com/ashishjuyal/banking-lib/errs"
-	"github.com/ashishjuyal/banking-lib/logger"
+	"github.com/andtkach/demogoauth/errs"
+	"github.com/andtkach/demogoauth/logger"
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/crypto/bcrypt"
 	"time"

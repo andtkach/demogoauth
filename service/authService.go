@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/andtkach/demogoauth/domain"
 	"github.com/andtkach/demogoauth/dto"
-	"github.com/ashishjuyal/banking-lib/errs"
-	"github.com/ashishjuyal/banking-lib/logger"
+	"github.com/andtkach/demogoauth/errs"
+	"github.com/andtkach/demogoauth/logger"
 	"github.com/dgrijalva/jwt-go"
 )
 

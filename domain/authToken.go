@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"github.com/ashishjuyal/banking-lib/errs"
-	"github.com/ashishjuyal/banking-lib/logger"
+	"github.com/andtkach/demogoauth/errs"
+	"github.com/andtkach/demogoauth/logger"
 	"github.com/dgrijalva/jwt-go"
 )
 
